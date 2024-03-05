@@ -1,14 +1,14 @@
 pipeline {
   agent {label 'ubuntu'}
   environment {
-    AGENTIP = sh 'hostname -I | awk \'{print $1}\''
+    AGENTADDR = sh(script: "hostname -I | awk \'{print \$1}\'",returnStdout: true).trim()
   }
   stages {
     stage("verify tooling") {
       steps {
         sh '''
           echo "AGENTIP: ${env.AGENTIP}"
-          echo "AGENTIP: ${AGENTIP}"
+          echo "AGENTADDR: ${AGENTADDR}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
