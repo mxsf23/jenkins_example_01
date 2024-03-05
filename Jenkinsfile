@@ -27,14 +27,14 @@ pipeline {
     }
     stage('Run tests against the container') {
       steps {
-        sh 'curl http://${AGENTIP}/index.html'
+        sh 'curl http://${AGENTIP}:9889'
       }
     }
   }
   post {
     always {
       sh 'sudo docker compose down --remove-orphans -v || sudo docker-compose down --remove-orphans -v'
-      sh 'sudo docker compose ps || sudo docker-compose ps'
+      // sh 'sudo docker compose ps || sudo docker-compose ps'
     }
   }
 }
