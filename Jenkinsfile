@@ -7,7 +7,7 @@ pipeline {
     stage("verify tooling") {
       steps {
         sh '''
-          echo 'AGENTIP: ${env.AGENTIP}'
+          echo "AGENTIP: ${env.AGENTIP}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
@@ -31,7 +31,7 @@ pipeline {
     }
     stage('Run tests against the container') {
       steps {
-        sh 'curl http://${env.AGENTIP}:9889'
+        sh "curl http://\${env.AGENTIP}:9889"
       }
     }
   }
