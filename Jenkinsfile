@@ -8,6 +8,7 @@ pipeline {
       steps {
         sh '''
           echo "AGENTADDR: ${AGENTADDR}"
+          echo "PWD: $PWD"
           printenv
           echo 'docker version'
           sudo docker version
@@ -36,6 +37,15 @@ pipeline {
             echo "Curl FAILED!!!"
             exit 1
           }   
+        }
+        script {
+          def md5_curr = sh(script: "curl -s http://${AGENTADDR}:9889 | md5sum | cut -d ' ' -f 1",returnStdout: true).trim()
+          def md5_new = sh(script: "md5sum $JENS_HOME/file02",returnStdout: true).trim()
+          if ("$md5_01" == "$md5_02") { 
+              echo "MD5 are equal: $md5_01"
+          } else {
+              echo "OOPS! MD5 Differs!"
+          }
         }
       }
     }
