@@ -8,7 +8,7 @@ pipeline {
       steps {
         sh '''
           echo "AGENTADDR: ${AGENTADDR}"
-          echo "AGENTIP: ${env.AGENTIP}"
+          // echo "AGENTIP: ${env.AGENTIP}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
