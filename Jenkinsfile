@@ -1,9 +1,13 @@
 pipeline {
   agent {label 'ubuntu'}
+  environment {
+    AGENTIP = sh(hostname -I | awk '{print $1}')
+  }
   stages {
     stage("verify tooling") {
       steps {
         sh '''
+          echo 'AGENTIP: ${env.AGENTIP}
           echo 'docker version'
           sudo docker version
           echo 'docker info'
@@ -27,14 +31,14 @@ pipeline {
     }
     stage('Run tests against the container') {
       steps {
-        sh 'curl http://${AGENTIP}:9889'
+        sh 'curl http://${env.AGENTIP}:9889'
       }
     }
   }
   post {
     always {
       sh 'sudo docker compose down --remove-orphans -v || sudo docker-compose down --remove-orphans -v'
-      // sh 'sudo docker compose ps || sudo docker-compose ps'
+      sh 'sudo docker compose ps || sudo docker-compose ps'
     }
   }
 }
