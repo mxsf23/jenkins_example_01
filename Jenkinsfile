@@ -4,11 +4,10 @@ pipeline {
     AGENTADDR = sh(script: "hostname -I | awk \'{print \$1}\'",returnStdout: true).trim()
   }
   stages {
-    stage("verify tooling") {
+    stage("verify packages") {
       steps {
         sh '''
           echo "AGENTADDR: ${AGENTADDR}"
-          echo "PWD: $PWD"
           printenv
           echo 'docker version'
           sudo docker version
@@ -23,7 +22,6 @@ pipeline {
     stage('Start container') {
       steps {
         sh 'sudo docker compose up -d --wait || sudo docker-compose up -d'
-        sh 'sudo docker compose ps || sudo docker-compose ps'
       }
     }
     stage('QA') {
@@ -43,8 +41,6 @@ pipeline {
           echo "MD5 Current: ${md5_curr}"
           def md5_new = sh(script: "md5sum $WORKSPACE/files/index.html | cut -d ' ' -f 1",returnStdout: true).trim()
           echo "MD5 New: ${md5_new}"
-          // def ls = sh(script: "ls -al", returnStdout: true)
-          // echo "${ls}"
           if ("$md5_curr" == "$md5_new") { 
               echo "MD5 are equal: $md5_curr"
           } else {
