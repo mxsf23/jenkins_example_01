@@ -8,7 +8,8 @@ pipeline {
       steps {
         sh '''
           echo "AGENTADDR: ${AGENTADDR}"
-          // echo "AGENTIP: ${env.AGENTIP}"
+          printenv
+          echo "AGENTIP: ${AGENTIP}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
@@ -32,7 +33,7 @@ pipeline {
     }
     stage('Run tests against the container') {
       steps {
-        sh "curl http://\${env.AGENTIP}:9889"
+        sh "curl http://${AGENTIP}:9889"
       }
     }
   }
