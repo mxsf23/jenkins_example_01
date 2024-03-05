@@ -40,9 +40,12 @@ pipeline {
         }
         script {
           def md5_curr = sh(script: "curl -s http://${AGENTADDR}:9889 | md5sum | cut -d ' ' -f 1",returnStdout: true).trim()
+          echo "MD5 Current: ${md5_curr}"
           def md5_new = sh(script: "md5sum $JENS_HOME/file02",returnStdout: true).trim()
-          if ("$md5_01" == "$md5_02") { 
-              echo "MD5 are equal: $md5_01"
+          echo "MD5 Current: ${md5_new}"
+          ls -l
+          if ("$md5_curr" == "$md5_new") { 
+              echo "MD5 are equal: $md5_curr"
           } else {
               echo "OOPS! MD5 Differs!"
           }
