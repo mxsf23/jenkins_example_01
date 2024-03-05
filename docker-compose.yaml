@@ -8,9 +8,7 @@ services:
       - files/index.html:/usr/share/nginx/html/index.html
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:${NGINX_PORT} || exit 1"]
+      test: ["CMD-SHELL", "curl -so /dev/null http://localhost || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-     

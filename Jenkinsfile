@@ -9,7 +9,6 @@ pipeline {
         sh '''
           echo "AGENTADDR: ${AGENTADDR}"
           printenv
-          echo "AGENTIP: ${AGENTIP}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
@@ -20,20 +19,24 @@ pipeline {
         '''
       }
     }
-    stage('Prune Docker data') {
-      steps {
-        sh 'sudo docker system prune -a --volumes -f'
-      }
-    }
     stage('Start container') {
       steps {
         sh 'sudo docker compose up -d --wait || sudo docker-compose up -d'
         sh 'sudo docker compose ps || sudo docker-compose ps'
       }
     }
-    stage('Run tests against the container') {
+    stage('QA') {
       steps {
-        sh "curl http://${AGENTIP}:9889"
+        script { 
+          def resp_code = sh(script: "curl -s -o /dev/null -I -w \'%{http_code}\' http://${AGENTADDR}:9889",returnStdout: true).trim()
+          echo "$resp_code"
+          if ("$resp_code" == "200") { 
+            echo "RESP CODE: $resp_code"
+          } else {
+            echo "Curl FAILED!!!"
+            exit 1
+          }   
+        }
       }
     }
   }
@@ -42,5 +45,8 @@ pipeline {
       sh 'sudo docker compose down --remove-orphans -v || sudo docker-compose down --remove-orphans -v'
       sh 'sudo docker compose ps || sudo docker-compose ps'
     }
+    failure {
+      mail body: "<b>Project Details:</b><br>Project: ${env.JOB_NAME} <br> Build Number: ${env.BUILD_NUMBER} <br> Build URL: ${env.BUILD_URL}", charset: 'UTF-8', from: 'jenkins@jen.local', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "${EMAIL_RECP}";   
+    } 
   }
 }
