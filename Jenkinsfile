@@ -7,8 +7,8 @@ pipeline {
     stage("verify tooling") {
       steps {
         sh '''
-          echo "AGENTIP: ${env.AGENTIP}"
           echo "AGENTADDR: ${AGENTADDR}"
+          echo "AGENTIP: ${env.AGENTIP}"
           echo 'docker version'
           sudo docker version
           echo 'docker info'
