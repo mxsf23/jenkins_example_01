@@ -1,7 +1,7 @@
 pipeline {
   agent {label 'ubuntu'}
   environment {
-    AGENTIP = sh(hostname -I | awk '{print $1}')
+    AGENTIP = sh 'hostname -I | awk \'{print $1}\''
   }
   stages {
     stage("verify tooling") {
