@@ -43,7 +43,8 @@ pipeline {
           echo "MD5 Current: ${md5_curr}"
           def md5_new = sh(script: "md5sum $JENS_HOME/file02",returnStdout: true).trim()
           echo "MD5 Current: ${md5_new}"
-          ls -l
+          def ls = sh(script: "ls -al", returnStdout: true)
+          echo "${ls}"
           if ("$md5_curr" == "$md5_new") { 
               echo "MD5 are equal: $md5_curr"
           } else {
