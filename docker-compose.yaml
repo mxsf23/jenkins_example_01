@@ -5,7 +5,7 @@ services:
     ports:
       - "${NGINX_PORT}:80"
     volumes:
-      - files/index.html:/usr/share/nginx/html/index.html
+      - "$PWD/files/index.html:/usr/share/nginx/html/index.html"
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -so /dev/null http://localhost || exit 1"]
