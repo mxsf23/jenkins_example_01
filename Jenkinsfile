@@ -9,7 +9,7 @@ pipeline {
           echo 'docker info'
           sudo docker info
           echo 'compose version'
-          sudo docker compose version || docker-compose version
+          sudo docker compose version || sudo docker-compose version
           sudo curl --version
         '''
       }
@@ -21,20 +21,20 @@ pipeline {
     }
     stage('Start container') {
       steps {
-        sh 'sudo docker compose up -d --wait'
-        sh 'sudo docker compose ps'
+        sh 'sudo docker compose up -d --wait || sudo docker-compose up -d --wait'
+        sh 'sudo docker compose ps || sudo docker-compose ps'
       }
     }
     stage('Run tests against the container') {
       steps {
-        sh 'curl http://${AGENTIP}/index.html '
+        sh 'curl http://${AGENTIP}/index.html'
       }
     }
   }
   post {
     always {
-      sh 'sudo docker compose down --remove-orphans -v'
-      sh 'sudo docker compose ps'
+      sh 'sudo docker compose down --remove-orphans -v || sudo docker-compose down --remove-orphans -v'
+      sh 'sudo docker compose ps || sudo docker-compose ps'
     }
   }
 }
