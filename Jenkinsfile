@@ -4,10 +4,13 @@ pipeline {
     stage("verify tooling") {
       steps {
         sh '''
-          docker version
-          docker info
-          docker compose version || docker-compose version
-          curl --version
+          echo 'docker version'
+          sudo docker version
+          echo 'docker info'
+          sudo docker info
+          echo 'compose version'
+          sudo docker compose version || docker-compose version
+          sudo curl --version
         '''
       }
     }
