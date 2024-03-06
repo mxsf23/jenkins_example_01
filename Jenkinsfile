@@ -31,6 +31,8 @@ pipeline {
           echo "$resp_code"
           if ("$resp_code" == "200") { 
             echo "RESP CODE: $resp_code"
+            def resp = sh(script: "curl -s http://${AGENTADDR}:9889",returnStdout: true).trim()
+            echo "RESP: $resp"
           } else {
             echo "Curl FAILED!!!"
             exit 1
