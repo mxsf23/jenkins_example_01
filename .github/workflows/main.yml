@@ -11,7 +11,7 @@ jobs:
       - name: Trigger jenkins job
         uses: joshlk/jenkins-githubaction@master
         with:
-          url: https://${{ secrets.JEN_URL }}
+          url: http://${{ secrets.JEN_URL }}
           job_name: jenkins_job_name
           username: ${{ secrets.JEN_USER }}
           api_token: ${{ secrets.JEN_TOKEN }}
